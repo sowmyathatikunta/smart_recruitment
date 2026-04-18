@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div style="display:flex;justify-content:center;align-items:center;min-height:70vh;">
+    <div class="card fade-up" style="width:100%;max-width:500px;">
+
+        <div style="margin-bottom:1.8rem;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:.8rem;">
+                <div style="width:42px;height:42px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(99,102,241,0.3);">
+                    <i class="fa-solid fa-file-arrow-up" style="color:#fff;font-size:1rem;"></i>
+                </div>
+                <div>
+                    <h2 style="margin-bottom:.1rem;font-size:1.3rem;">Upload Resume</h2>
+                    <p style="color:var(--muted);font-size:.82rem;">PDF only — max 10 MB</p>
+                </div>
+            </div>
+        </div>
+
+        {% if error %}
+        <div class="flash error" style="margin-bottom:1.2rem;">
+            <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data" id="uploadForm" style="display:flex;flex-direction:column;gap:0;">
+
+            <label for="resumeInput" id="dropZone"
+                style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;
+                       border:2px dashed var(--border);border-radius:14px;padding:3rem 2rem;
+                       text-align:center;cursor:pointer;
+                       transition:border-color .25s,background .25s;
+                       background:rgba(255,255,255,0.02);margin-bottom:1.2rem;">
+                <div id="dzIcon" style="width:56px;height:56px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);border-radius:14px;display:flex;align-items:center;justify-content:center;">
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size:1.4rem;color:var(--accent2);"></i>
+                </div>
+                <div>
+                    <p style="font-weight:600;color:var(--text);margin-bottom:.25rem;" id="dzText">Drag & drop your resume here</p>
+                    <p style="font-size:.8rem;color:var(--muted);">or click to browse files</p>
+                </div>
+                <input type="file" name="resume" id="resumeInput" style="display:none;" accept=".pdf">
+            </label>
+
+            <div id="fileChosen" style="display:none;align-items:center;gap:10px;background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.25);border-radius:10px;padding:10px 14px;margin-bottom:1.2rem;font-size:.87rem;color:var(--success);">
+                <i class="fa-solid fa-file-circle-check"></i>
+                <span id="fileName"></span>
+            </div>
+
+            <button type="submit" style="width:100%;padding:13px;">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Analyse with AI
+            </button>
+        </form>
+
+        <div style="display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.6rem;">
+            <div style="display:flex;align-items:center;gap:6px;font-size:.77rem;color:var(--muted);">
+                <i class="fa-solid fa-shield-halved" style="color:var(--accent2);"></i> Secure upload
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:.77rem;color:var(--muted);">
+                <i class="fa-solid fa-clock" style="color:var(--accent2);"></i> Results in seconds
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:.77rem;color:var(--muted);">
+                <i class="fa-solid fa-brain" style="color:var(--accent2);"></i> AI-powered match
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const dz  = document.getElementById('dropZone');
+    const inp = document.getElementById('resumeInput');
+    const dzT = document.getElementById('dzText');
+    const fc  = document.getElementById('fileChosen');
+    const fn  = document.getElementById('fileName');
+
+    function setFile(file) {
+        if (!file) return;
+        dzT.textContent = 'File selected!';
+        dz.style.borderColor = 'rgba(52,211,153,0.5)';
+        dz.style.background  = 'rgba(52,211,153,0.05)';
+        fc.style.display = 'flex';
+        fn.textContent   = file.name;
+    }
+    inp.addEventListener('change', () => { if (inp.files[0]) setFile(inp.files[0]); });
+    dz.addEventListener('dragover', e => { e.preventDefault(); dz.style.borderColor='var(--accent)'; });
+    dz.addEventListener('dragleave', () => { dz.style.borderColor='var(--border)'; });
+    dz.addEventListener('drop', e => {
+        e.preventDefault();
+        const file = e.dataTransfer.files[0];
+        if (file) { const dt=new DataTransfer(); dt.items.add(file); inp.files=dt.files; setFile(file); }
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;" class="fade-up">
+    <div>
+        <h2 style="margin-bottom:.2rem;">Analytics Dashboard</h2>
+        <p style="color:var(--muted);font-size:.88rem;">Live platform statistics</p>
+    </div>
+    <a href="/admin" class="btn btn-ghost" style="font-size:.85rem;">
+        <i class="fa-solid fa-arrow-left"></i> Back to Admin
+    </a>
+</div>
+
+<!-- Real stat cards -->
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;margin-bottom:1.6rem;" class="fade-up delay-1">
+    <div class="card" style="padding:1.3rem 1.5rem;display:flex;align-items:center;gap:14px;">
+        <div style="width:42px;height:42px;min-width:42px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa-solid fa-users" style="color:var(--accent2);"></i>
+        </div>
+        <div>
+            <p style="font-size:1.5rem;font-family:'Syne',sans-serif;font-weight:800;line-height:1;">{{ total_users }}</p>
+            <p style="font-size:.75rem;color:var(--muted);margin-top:.15rem;">Applicants</p>
+        </div>
+    </div>
+    <div class="card" style="padding:1.3rem 1.5rem;display:flex;align-items:center;gap:14px;">
+        <div style="width:42px;height:42px;min-width:42px;background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa-solid fa-briefcase" style="color:var(--success);"></i>
+        </div>
+        <div>
+            <p style="font-size:1.5rem;font-family:'Syne',sans-serif;font-weight:800;line-height:1;">{{ total_jobs }}</p>
+            <p style="font-size:.75rem;color:var(--muted);margin-top:.15rem;">Active Jobs</p>
+        </div>
+    </div>
+    <div class="card" style="padding:1.3rem 1.5rem;display:flex;align-items:center;gap:14px;">
+        <div style="width:42px;height:42px;min-width:42px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa-solid fa-file-lines" style="color:#fbbf24;"></i>
+        </div>
+        <div>
+            <p style="font-size:1.5rem;font-family:'Syne',sans-serif;font-weight:800;line-height:1;">{{ total_apps }}</p>
+            <p style="font-size:.75rem;color:var(--muted);margin-top:.15rem;">Resumes Analysed</p>
+        </div>
+    </div>
+    <div class="card" style="padding:1.3rem 1.5rem;display:flex;align-items:center;gap:14px;">
+        <div style="width:42px;height:42px;min-width:42px;background:rgba(165,180,252,0.1);border:1px solid rgba(165,180,252,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa-solid fa-star" style="color:var(--accent3);"></i>
+        </div>
+        <div>
+            <p style="font-size:1.5rem;font-family:'Syne',sans-serif;font-weight:800;line-height:1;">{{ avg_score }}%</p>
+            <p style="font-size:.75rem;color:var(--muted);margin-top:.15rem;">Avg Match Score</p>
+        </div>
+    </div>
+</div>
+
+<!-- Chart -->
+<div class="card fade-up delay-2">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.4rem;">
+        <div style="width:38px;height:38px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);border-radius:9px;display:flex;align-items:center;justify-content:center;">
+            <i class="fa-solid fa-chart-bar" style="color:var(--accent2);font-size:.9rem;"></i>
+        </div>
+        <div>
+            <h3 style="margin-bottom:.05rem;font-size:1rem;">Score Distribution</h3>
+            <p style="color:var(--muted);font-size:.78rem;">Resume match scores across all applications</p>
+        </div>
+    </div>
+
+    {% if total_apps > 0 %}
+    <div style="border-radius:10px;overflow:hidden;">
+        <img src="{{ url_for('static', filename='charts/chart.png') }}"
+             width="100%" style="display:block;border-radius:10px;"
+             alt="Score distribution chart">
+    </div>
+    {% else %}
+    <div style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.8rem;height:180px;border:2px dashed var(--border);border-radius:10px;color:var(--muted);">
+        <i class="fa-solid fa-chart-column" style="font-size:1.8rem;opacity:.3;"></i>
+        <p style="font-size:.85rem;">No applications yet — chart will appear once resumes are submitted.</p>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

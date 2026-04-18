@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Page header -->
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;" class="fade-up">
+    <div>
+        <h2 style="margin-bottom:.2rem;">Open Positions</h2>
+        <p style="color:var(--muted);font-size:.9rem;">Browse roles and submit your resume for AI matching</p>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);border-radius:999px;padding:6px 14px;font-size:.8rem;color:var(--accent3);">
+        <span style="width:7px;height:7px;border-radius:50%;background:var(--success);box-shadow:0 0 6px var(--success);display:inline-block;"></span>
+        AI Matching Active
+    </div>
+</div>
+
+<!-- Job count bar -->
+{% if jobs %}
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.4rem;flex-wrap:wrap;gap:.6rem;" class="fade-up">
+    <p style="font-size:.85rem;color:var(--muted);">
+        Showing <strong style="color:var(--text);">{{ jobs|length }}</strong> open role{{ 's' if jobs|length != 1 else '' }}
+    </p>
+    <div style="display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--muted);">
+        <i class="fa-solid fa-circle-info" style="color:var(--accent2);"></i>
+        Upload your resume to get an AI match score
+    </div>
+</div>
+{% endif %}
+
+<!-- Jobs grid -->
+{% if jobs %}
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.2rem;">
+    {% for job in jobs %}
+
+    {# Cycle through icon colours for visual variety #}
+    {% set icons = ['fa-briefcase','fa-code','fa-brain','fa-cloud','fa-shield-halved',
+                    'fa-database','fa-mobile-screen','fa-chart-line','fa-palette',
+                    'fa-server','fa-bug','fa-network-wired','fa-robot','fa-pen-ruler',
+                    'fa-terminal','fa-apple-whole'] %}
+    {% set colours = ['var(--accent2)','var(--success)','#fbbf24','var(--accent3)',
+                      'var(--danger)','#22d3ee','#a78bfa','#34d399',
+                      '#fb923c','var(--accent2)','var(--success)','#fbbf24',
+                      'var(--accent3)','#22d3ee','var(--danger)','#a78bfa'] %}
+    {% set icon  = icons[(loop.index0) % icons|length] %}
+    {% set color = colours[(loop.index0) % colours|length] %}
+
+    <div class="card"
+         style="display:flex;flex-direction:column;justify-content:space-between;gap:1.4rem;
+                transition:transform .25s ease,box-shadow .25s ease;
+                animation:fadeUp .45s ease both;
+                animation-delay:{{ (loop.index0 * 0.055)|round(3) }}s;"
+         onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 40px rgba(99,102,241,0.22)'"
+         onmouseout="this.style.transform='translateY(0)';this.style.boxShadow=''">
+
+        <div>
+            <!-- Icon + Title row -->
+            <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:1rem;">
+                <div style="width:44px;height:44px;min-width:44px;
+                            background:linear-gradient(135deg,rgba(99,102,241,0.15),rgba(129,140,248,0.08));
+                            border:1px solid rgba(99,102,241,0.22);
+                            border-radius:11px;display:flex;align-items:center;justify-content:center;
+                            flex-shrink:0;">
+                    <i class="fa-solid {{ icon }}" style="color:{{ color }};font-size:.9rem;"></i>
+                </div>
+                <div style="min-width:0;">
+                    <h3 style="font-size:.97rem;margin-bottom:.18rem;
+                               white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                        {{ job['title'] }}
+                    </h3>
+                    <span style="font-size:.73rem;color:var(--muted);">
+                        Full-time &bull; Remote
+                    </span>
+                </div>
+            </div>
+
+            <!-- Description (clamped to 3 lines) -->
+            <p style="color:var(--muted);font-size:.855rem;line-height:1.65;
+                      display:-webkit-box;-webkit-line-clamp:3;line-clamp:3;
+                      -webkit-box-orient:vertical;overflow:hidden;">
+                {{ job['description'] }}
+            </p>
+        </div>
+
+        <!-- Apply button -->
+        <a class="btn" href="/upload/{{ job['id'] }}"
+           style="width:100%;justify-content:center;padding:11px;">
+            <i class="fa-solid fa-paper-plane"></i> Apply Now
+        </a>
+
+    </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<!-- Empty state -->
+<div style="text-align:center;padding:5rem 1rem;" class="fade-up">
+    <div style="width:72px;height:72px;background:var(--surface);border:1px solid var(--border);
+                border-radius:20px;display:inline-flex;align-items:center;justify-content:center;
+                margin-bottom:1.4rem;">
+        <i class="fa-solid fa-inbox" style="font-size:1.8rem;color:var(--muted);"></i>
+    </div>
+    <h3 style="color:var(--muted);font-weight:500;">No open positions yet</h3>
+    <p style="color:var(--muted);font-size:.85rem;margin-top:.4rem;">
+        Check back soon — new roles are added regularly.
+    </p>
+</div>
+{% endif %}
+
+{% endblock %}

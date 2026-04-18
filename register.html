@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div style="display:flex;justify-content:center;align-items:center;min-height:70vh;">
+    <div class="card fade-up" style="width:100%;max-width:440px;">
+
+        <!-- Header -->
+        <div style="text-align:center;margin-bottom:2rem;">
+            <div style="width:52px;height:52px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:14px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:1rem;box-shadow:0 6px 24px rgba(99,102,241,0.35);">
+                <i class="fa-solid fa-user-plus" style="color:#fff;font-size:1.1rem;"></i>
+            </div>
+            <h2 style="margin-bottom:.3rem;">Create account</h2>
+            <p style="color:var(--muted);font-size:.88rem;">Join HireAI – it's completely free</p>
+        </div>
+
+        <!-- Flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">
+                        <i class="fa-solid {% if category == 'error' %}fa-circle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Form -->
+        <form method="POST" style="display:flex;flex-direction:column;gap:0;">
+
+            <label style="font-size:.8rem;font-weight:600;color:var(--muted);letter-spacing:.05em;margin-bottom:.4rem;">FULL NAME</label>
+            <div style="position:relative;margin-bottom:1rem;">
+                <i class="fa-solid fa-user" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.85rem;pointer-events:none;"></i>
+                <input name="name" placeholder="Jane Doe" type="text"
+                       style="padding-left:40px;margin-bottom:0;" autocomplete="name">
+            </div>
+
+            <label style="font-size:.8rem;font-weight:600;color:var(--muted);letter-spacing:.05em;margin-bottom:.4rem;">EMAIL ADDRESS</label>
+            <div style="position:relative;margin-bottom:1rem;">
+                <i class="fa-solid fa-envelope" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.85rem;pointer-events:none;"></i>
+                <input name="email" placeholder="you@example.com" type="email"
+                       style="padding-left:40px;margin-bottom:0;" autocomplete="email">
+            </div>
+
+            <label style="font-size:.8rem;font-weight:600;color:var(--muted);letter-spacing:.05em;margin-bottom:.4rem;">PASSWORD</label>
+            <div style="position:relative;margin-bottom:1.6rem;">
+                <i class="fa-solid fa-key" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.85rem;pointer-events:none;"></i>
+                <input name="password" type="password" placeholder="••••••••"
+                       style="padding-left:40px;margin-bottom:0;" autocomplete="new-password">
+            </div>
+
+            <button type="submit" style="width:100%;padding:13px;">
+                <i class="fa-solid fa-rocket"></i> Create Account
+            </button>
+        </form>
+
+        <p style="text-align:center;margin-top:1.4rem;font-size:.85rem;color:var(--muted);">
+            Already have an account?
+            <a href="/login" style="color:var(--accent2);font-weight:600;text-decoration:none;">Sign in</a>
+        </p>
+
+    </div>
+</div>
+
+{% endblock %}

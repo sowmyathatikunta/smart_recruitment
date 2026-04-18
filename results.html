@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div style="max-width:680px;margin:0 auto;" class="fade-up">
+
+    <!-- Score card -->
+    <div class="card" style="text-align:center;padding:2.8rem 2rem;margin-bottom:1.4rem;position:relative;overflow:hidden;">
+        <!-- Glow background -->
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(99,102,241,0.12),transparent);pointer-events:none;"></div>
+
+        <p style="font-size:.8rem;font-weight:700;letter-spacing:.1em;color:var(--muted);margin-bottom:.6rem;">AI MATCH SCORE</p>
+
+        <!-- Score number -->
+        <div style="position:relative;display:inline-block;margin-bottom:1.4rem;">
+            <span style="font-family:'Syne',sans-serif;font-size:clamp(4rem,12vw,7rem);font-weight:800;line-height:1;
+                         background:linear-gradient(135deg,var(--accent),var(--accent2),var(--accent3));
+                         -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+                {{ score }}
+            </span>
+            <span style="font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:700;color:var(--accent2);-webkit-text-fill-color:var(--accent2);">%</span>
+        </div>
+
+        <!-- Progress bar -->
+        <div style="background:rgba(255,255,255,0.06);border-radius:999px;height:8px;overflow:hidden;max-width:320px;margin:0 auto 1.2rem;">
+            <div id="scoreBar" style="height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width 1.2s cubic-bezier(.4,0,.2,1);"></div>
+        </div>
+
+        <!-- Rating label -->
+        <div id="ratingBadge" style="display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:6px 18px;font-size:.85rem;font-weight:600;"></div>
+    </div>
+
+    <!-- Missing skills -->
+    <div class="card fade-up delay-1">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.4rem;">
+            <div style="width:36px;height:36px;background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.25);border-radius:9px;display:flex;align-items:center;justify-content:center;">
+                <i class="fa-solid fa-triangle-exclamation" style="color:var(--danger);font-size:.85rem;"></i>
+            </div>
+            <div>
+                <h3 style="margin-bottom:.05rem;font-size:1rem;">Skills Gap</h3>
+                <p style="color:var(--muted);font-size:.8rem;">These skills were not detected in your resume</p>
+            </div>
+        </div>
+
+        {% if missing %}
+        <div style="display:flex;flex-wrap:wrap;gap:.6rem;">
+            {% for s in missing %}
+            <span style="display:inline-flex;align-items:center;gap:7px;background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.22);border-radius:999px;padding:6px 14px;font-size:.82rem;color:var(--danger);">
+                <i class="fa-solid fa-minus-circle" style="font-size:.75rem;"></i>{{ s }}
+            </span>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div style="display:flex;align-items:center;gap:10px;color:var(--success);font-size:.9rem;font-weight:500;">
+            <i class="fa-solid fa-circle-check"></i>
+            All required skills are present — great match!
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Actions -->
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:1.4rem;" class="fade-up delay-2">
+        <a href="/dashboard" class="btn" style="flex:1;justify-content:center;">
+            <i class="fa-solid fa-arrow-left"></i> Browse More Jobs
+        </a>
+        <!-- <a href="/upload" class="btn btn-ghost" style="flex:1;justify-content:center;">
+            <i class="fa-solid fa-rotate-right"></i> Try Again
+        </a> -->
+    </div>
+</div>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const score = {{ score }};
+        setTimeout(() => {
+            document.getElementById('scoreBar').style.width = score + '%';
+        }, 200);
+
+        const badge = document.getElementById('ratingBadge');
+        if (score >= 80) {
+            badge.style.background = 'rgba(52,211,153,0.1)';
+            badge.style.border = '1px solid rgba(52,211,153,0.3)';
+            badge.style.color = '#34d399';
+            badge.innerHTML = '<i class="fa-solid fa-star"></i> Excellent Match';
+        } else if (score >= 55) {
+            badge.style.background = 'rgba(251,191,36,0.1)';
+            badge.style.border = '1px solid rgba(251,191,36,0.3)';
+            badge.style.color = '#fbbf24';
+            badge.innerHTML = '<i class="fa-solid fa-thumbs-up"></i> Good Match';
+        } else {
+            badge.style.background = 'rgba(248,113,113,0.1)';
+            badge.style.border = '1px solid rgba(248,113,113,0.3)';
+            badge.style.color = 'var(--danger)';
+            badge.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Needs Improvement';
+        }
+    });
+</script>
+
+{% endblock %}

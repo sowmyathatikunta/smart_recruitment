@@ -1,0 +1,7 @@
+flask
+scikit-learn
+PyPDF2
+matplotlib
+flask-socketio
+eventlet
+werkzeug

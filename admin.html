@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Page header -->
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;" class="fade-up">
+    <div>
+        <h2 style="margin-bottom:.2rem;">Admin Panel</h2>
+        <p style="color:var(--muted);font-size:.88rem;">Manage job postings and platform analytics</p>
+    </div>
+    <a class="btn" href="/analytics" style="font-size:.85rem;">
+        <i class="fa-solid fa-chart-line"></i> View Analytics
+    </a>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start;" class="admin-grid">
+
+    <!-- Post Job Form -->
+    <div class="card fade-up" style="height:fit-content;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.6rem;">
+            <div style="width:38px;height:38px;background:linear-gradient(135deg,rgba(99,102,241,0.2),rgba(129,140,248,0.1));border:1px solid rgba(99,102,241,0.25);border-radius:9px;display:flex;align-items:center;justify-content:center;">
+                <i class="fa-solid fa-plus" style="color:var(--accent2);font-size:.9rem;"></i>
+            </div>
+            <h3 style="margin-bottom:0;">Post New Job</h3>
+        </div>
+
+        <form method="POST" style="display:flex;flex-direction:column;gap:0;">
+            <label style="font-size:.78rem;font-weight:700;color:var(--muted);letter-spacing:.05em;margin-bottom:.4rem;">JOB TITLE</label>
+            <input name="title" placeholder="e.g. Senior Backend Engineer" style="margin-bottom:1rem;">
+
+            <label style="font-size:.78rem;font-weight:700;color:var(--muted);letter-spacing:.05em;margin-bottom:.4rem;">JOB DESCRIPTION</label>
+            <textarea name="description" placeholder="Describe the role, responsibilities, and required skills..." style="margin-bottom:1.4rem;"></textarea>
+
+            <button type="submit" style="width:100%;padding:12px;">
+                <i class="fa-solid fa-paper-plane"></i> Post Job
+            </button>
+        </form>
+    </div>
+
+    <!-- Posted Jobs -->
+    <div class="fade-up delay-1">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+            <h3 style="margin-bottom:0;">Posted Jobs</h3>
+            <span style="font-size:.78rem;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:3px 10px;">
+                {{ jobs|length }} total
+            </span>
+        </div>
+
+        {% if jobs %}
+        <div style="display:flex;flex-direction:column;gap:.8rem;">
+            {% for job in jobs %}
+            <div class="card" style="padding:1.1rem 1.3rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;
+                        transition:transform .2s ease;"
+                 onmouseover="this.style.transform='translateX(3px)'"
+                 onmouseout="this.style.transform='translateX(0)'">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <div style="width:34px;height:34px;min-width:34px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                        <i class="fa-solid fa-briefcase" style="color:var(--accent2);font-size:.8rem;"></i>
+                    </div>
+                    <p style="font-weight:600;font-size:.9rem;color:var(--text);">{{ job['title'] }}</p>
+                </div>
+                <span style="font-size:.75rem;color:var(--success);background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.2);border-radius:999px;padding:3px 10px;white-space:nowrap;">
+                    Active
+                </span>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="card" style="text-align:center;padding:2.5rem 1.5rem;color:var(--muted);">
+            <i class="fa-solid fa-inbox" style="font-size:1.8rem;margin-bottom:.8rem;display:block;opacity:.5;"></i>
+            <p style="font-size:.88rem;">No jobs posted yet.<br>Use the form to create your first listing.</p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<style>
+@media (max-width:700px) {
+    .admin-grid { grid-template-columns:1fr !important; }
+}
+</style>
+
+{% endblock %}
